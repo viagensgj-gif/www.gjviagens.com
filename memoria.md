@@ -201,7 +201,52 @@ Ou seja, o domínio foi registrado **através da HostGator**. O painel para edit
 dela. Se o acesso estiver perdido, alternativa é mover o DNS para a Cloudflare (grátis),
 **recriando os MX e o SPF do Titan lá** antes de apontar para a Netlify.
 
-#### Estado do deploy
+#### ✅ Site publicado no GitHub Pages (não na Netlify)
+
+**No ar em `https://viagensgj-gif.github.io/www.gjviagens.com/`.** Custo zero, sem cartão.
+
+**Por que GitHub Pages e não Netlify:** a conta já existe, o repositório é público (que é o
+requisito do plano gratuito) e o site é estático. Um serviço a menos para manter. O cadastro
+da Netlify empurra planos pagos, o que incomodou. **Trade-off registrado:** quando o domínio
+mudar, redirecionar o antigo para o novo é mais fácil na Netlify. Se um dia pesar, é só
+conectar a Netlify neste mesmo repositório — nada precisa ser refeito.
+
+**Publicação: pelo branch (`principal` / `raiz`), configurado na tela do GitHub.**
+
+##### Três tropeços que custaram tempo, e o que aprender deles
+
+1. **O botão "Salvar" só acende quando algo muda.** `principal` e `raiz` já são o padrão,
+   então reescolher não habilitava nada e parecia que a tela estava quebrada. Estava
+   funcionando; faltava o sinal de que já estava certo.
+
+2. **CNAME com erro de digitação derrubou o site inteiro.** Foi cadastrado
+   `www.gjviage**sn**.com.br` (n e s trocados). O GitHub passou a redirecionar todo acesso
+   para um domínio inexistente, **inclusive o endereço do github.io**. Sintoma: "o site não
+   abre", sem relação aparente com a causa. Resolvido removendo o arquivo `CNAME`.
+   **Ordem correta, que não pode ser invertida:** primeiro apontar o DNS para o GitHub,
+   só depois cadastrar o domínio na tela do Pages.
+
+3. **Dois publicadores brigando.** Achei que a configuração do usuário não tinha salvado e
+   adicionei um workflow (`.github/workflows/publicar.yml`). As duas rodavam a cada push, e
+   a do branch terminava ~19s depois e ganhava — publicando o repositório inteiro, com
+   `memoria.md` e `specs/` acessíveis pela web. **Eu havia afirmado o contrário ao usuário;
+   estava errado e foi corrigido.**
+
+##### Solução final: um publicador só + `_config.yml`
+
+Workflow removido, `.nojekyll` removido (é ele que faz o GitHub ignorar o `_config.yml`), e
+criado `_config.yml` com `exclude:` listando o que não vai para o ar: `CLAUDE.md`,
+`memoria.md`, `PUBLICAR.md`, `specs/`, `docs/`, o PDF da Oura, o zip das fontes e os 5 pesos
+da Saira que o CSS não usa.
+
+Verificado: arquivos do site em 200, arquivos de trabalho em 404. **Cuidado ao conferir:**
+o GitHub devolve **503 por excesso de requisições seguidas** — um 503 não significa que o
+arquivo saiu do ar. Espaçar as requisições, e só tratar **200** como "está publicado".
+
+> `.nojekyll` e `_config.yml` são mutuamente excludentes. Se alguém readicionar `.nojekyll`,
+> o `exclude` para de valer **em silêncio** e os arquivos internos voltam ao ar.
+
+#### Estado do deploy anterior (Netlify Drop, descartado)
 
 O deploy do Netlify Drop continua **HTTP 401** (não vinculado a conta). O caminho melhor
 agora é descartar esse drop e **conectar a Netlify ao repositório do GitHub**: publica
