@@ -77,6 +77,83 @@ a pasta do projeto, porque o defeito só aparece depois de extrair.
 > vinculado a uma conta. Não dá para diagnosticar por fora nesse estado; só pelo navegador
 > do próprio Gabriel ou reproduzindo local.
 
+### Planejado: rebranding de logo, fontes e cores (sem mexer em conteúdo)
+
+O Gabriel avisou que haverá um **rebranding futuro**: logo, tipografia e paleta mudam.
+**O conteúdo não muda** — textos, case e estrutura das seções ficam como estão.
+
+Isso define o que precisa estar trocável sem reescrever o site.
+
+#### Estado atual: estruturado, com 3 furos
+
+O `tokens.css` já centraliza paleta, fontes, escala tipográfica e espaçamento em custom
+properties. Trocar `--accent` muda o dourado do site quase todo. Mas a auditoria de
+16/11/2026 achou cor escrita à mão fora da paleta:
+
+| Cor | Onde | Ocorrências |
+|---|---|---|
+| `#8A6A22` | coluna de % das tabelas | 2 |
+| `#7A5C1B` | "ECONOMIA TOTAL", passos numerados | 4 |
+| `#FBF5E8` | fundo da linha de total | 2 |
+
+As três são variações do dourado, criadas porque `--accent` (`#DCB05B`) não passa no
+contraste em texto pequeno sobre fundo claro (ver 2026-09-04). A decisão era certa; só não
+virou token.
+
+Além disso, **16 ocorrências reescrevem um token à mão como rgba**: `rgba(243, 250, 255, .78)`
+é `--on-primary`, `rgba(2, 19, 46, .35)` é `--navy-deep`, `rgba(220, 176, 91, .12)` é
+`--accent`. O `index.html` está limpo (só `currentColor` nos ícones).
+
+**Consequência no rebranding:** trocar `--accent` deixaria os números das duas tabelas de
+economia na cor antiga — justamente as seções que provam o resultado da GJ.
+
+#### Arrumação proposta (ainda não feita)
+
+Promover as 3 cores a tokens (`--accent-escuro`, `--accent-escuro-forte`, `--accent-fundo`),
+publicar os valores RGB dos tokens usados com alpha, e trocar os rgba manuais por
+`rgba(var(--token-rgb), .78)`. **Zero mudança visual** — mesmos valores, só saem do
+componente e vão para a paleta. Depois disso o rebranding de cor vira edição de um arquivo.
+
+> Quando o rebranding acontecer, o `specs/design.md` §1 (paleta), §2 (tipografia) e §5
+> (logo) precisam ser reescritos **junto**, não depois. Caso contrário a spec passa a
+> descrever uma marca que não existe mais.
+
+### Repositório Git criado e publicado no GitHub
+
+Git não existia nesta máquina. Instalado via `winget install Git.Git` (2.56.0.4).
+**O `git` não entra no PATH desta sessão** — chamar sempre por
+`& 'C:\Program Files\Git\cmd\git.exe'`.
+
+- Identidade definida **local ao repositório**, não global: `GJ Viagens` /
+  `viagensgj@gmail.com`.
+- Remoto: `https://github.com/viagensgj-gif/www.gjviagens.com.git`, branch `main`.
+  Primeiro commit: 39 arquivos, 3.720 linhas, 6,28 MiB enviados.
+
+**O push não funciona pelo terminal interno** (`fatal: Cannot prompt because user
+interactivity has been disabled`). O Git Credential Manager precisa abrir o navegador para
+autenticar. **Caminho que funcionou: `run_in_terminal`**, no terminal do próprio usuário.
+
+### ⚠ Decisão do Gabriel: repositório público com os documentos internos
+
+Levantei antes do push que o repositório é **público** e que isso expõe:
+
+1. `specs/conteudo.md` com as anotações internas: "a tabela não fecha na conta", "os 30%
+   vêm de emissões fora do recorte... o PDF prova 25,64% no máximo".
+2. `memoria.md` com o primeiro nome de um cliente ("Douglas e sua família") e os valores
+   das viagens dele.
+3. O e-mail do autor em todo commit, coletável por robôs de spam.
+
+**O Gabriel escolheu manter público e subir tudo**, ciente disso. Decisão dele, registrada.
+
+> **O que não subiu:** `docs/comparativo-economia.pdf`, por ter nome e sobrenome de 12
+> colaboradores de um cliente — terceiros que não participaram dessa decisão. Confirmado
+> por API que `docs/` responde 404 no GitHub. Está no `.gitignore`, com o motivo escrito
+> dentro do arquivo.
+>
+> **Lembrete para qualquer mudança futura:** no Git, apagar não resolve. O arquivo
+> permanece no histórico e em qualquer cópia já feita. Remover de verdade exige reescrever
+> o histórico (`git filter-repo`) e forçar o push.
+
 ### Decidido: hospedagem gratuita na Netlify
 
 O plano da HostGator não responde e o Gabriel optou por não pagar hospedagem.
@@ -85,8 +162,50 @@ O plano da HostGator não responde e o Gabriel optou por não pagar hospedagem.
   10/07/2026, **vence em 10/07/2027**. Nameservers ainda apontam para a HostGator.
 - Próximo passo: adicionar `www.gjviagens.com.br` na Netlify e trocar os nameservers no
   Registro.br pelos que a Netlify indicar.
-- ⚠ **Antes de trocar os nameservers, confirmar se existe e-mail `@gjviagens.com.br`
-  ativo na HostGator.** Trocar o DNS sem levar os registros MX junto derruba o e-mail.
+#### ✅ Respondido em 16/11/2026: existe e-mail, e por isso NÃO se troca o nameserver
+
+Consulta de DNS resolveu a pendência:
+
+```
+MX   10 mx1.titan.email
+MX   20 mx2.titan.email
+TXT  v=spf1 include:spf.titan.email ~all
+```
+
+**O domínio tem e-mail ativo no Titan Email** (serviço que a HostGator revende). Trocar os
+nameservers para a Netlify apagaria esses registros e **derrubaria o e-mail da empresa**.
+
+**Decisão: manter o DNS onde está e usar DNS externo na Netlify.** Mexe só em dois
+registros, e os MX ficam intocados:
+
+| Registro | Tipo | Valor |
+|---|---|---|
+| `www` | CNAME | `<nome-do-site>.netlify.app` |
+| `@` (raiz) | A | `75.2.60.5` |
+
+IP confirmado resolvendo `apex-loadbalancer.netlify.com` (responde `75.2.60.5` e
+`99.83.231.61`) — não copiado de memória nem de tutorial.
+
+> **Nunca tocar nos registros MX nem no TXT do SPF.** Site e e-mail dividem o mesmo
+> domínio, mas são registros independentes.
+
+#### Quem controla o domínio
+
+RDAP do Registro.br:
+
+- **Titular:** GJ VIAGENS LTDA (CNPJ 58.624.931/0001-40)
+- **Contato técnico:** Gabriel de Oliveira Jactchak
+- **Registrador:** NEWFOLD (handle `p43`) — grupo dono da HostGator
+
+Ou seja, o domínio foi registrado **através da HostGator**. O painel para editar DNS é o
+dela. Se o acesso estiver perdido, alternativa é mover o DNS para a Cloudflare (grátis),
+**recriando os MX e o SPF do Titan lá** antes de apontar para a Netlify.
+
+#### Estado do deploy
+
+O deploy do Netlify Drop continua **HTTP 401** (não vinculado a conta). O caminho melhor
+agora é descartar esse drop e **conectar a Netlify ao repositório do GitHub**: publica
+sozinha a cada commit e já nasce pública.
 
 ---
 

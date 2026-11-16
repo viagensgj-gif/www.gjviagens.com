@@ -3,7 +3,7 @@
   "short_name": "GJ Viagens",
   "description": "Gestão de viagens corporativas com suporte 24 horas.",
   "lang": "pt-BR",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#F8FCFF",
   "theme_color": "#032B54",
