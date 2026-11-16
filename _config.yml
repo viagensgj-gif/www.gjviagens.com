@@ -1,0 +1,35 @@
+# Configuração do GitHub Pages
+#
+# O site é HTML puro: nada aqui gera página nem muda o visual.
+# Esta lista serve para uma coisa só: manter os arquivos de trabalho dentro do
+# repositório, mas FORA do que vai para a internet.
+#
+# Para conferir se funcionou, abra um destes caminhos no endereço do site.
+# Todos devem dar "404".
+
+exclude:
+  # Documentação interna do projeto
+  - CLAUDE.md
+  - memoria.md
+  - PUBLICAR.md
+  - specs/
+
+  # Documento com dados de cliente (já fora do Git, listado por segurança)
+  - docs/
+
+  # Material de origem, não é parte do site
+  - "logo gj vetorizada.svg"
+  - Saira_Condensed.zip
+  - "Oura Ring.url"
+  - "screencapture-ouraring-2026-08-20-18_21_53.pdf"
+
+  # Pesos da Saira que o CSS não usa (economiza espaço, ninguém baixa)
+  - assets/fonts/Saira_Condensed/SairaCondensed-Thin.ttf
+  - assets/fonts/Saira_Condensed/SairaCondensed-ExtraLight.ttf
+  - assets/fonts/Saira_Condensed/SairaCondensed-Light.ttf
+  - assets/fonts/Saira_Condensed/SairaCondensed-Medium.ttf
+  - assets/fonts/Saira_Condensed/SairaCondensed-Black.ttf
+
+  # Configuração do repositório
+  - .gitignore
+  - .github/
