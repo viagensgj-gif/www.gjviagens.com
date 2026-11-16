@@ -1,0 +1,110 @@
+/* ==========================================================================
+   Tokens — GJ Viagens
+   Valores canônicos definidos em specs/design.md. Não inventar cor nem
+   tamanho fora desta lista.
+   ========================================================================== */
+
+/* --- Fontes locais: só os 4 pesos usados (ver specs/plano.md §2) ---------- */
+
+@font-face {
+  font-family: "Saira Condensed";
+  src: url("../fonts/Saira_Condensed/SairaCondensed-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Saira Condensed";
+  src: url("../fonts/Saira_Condensed/SairaCondensed-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Saira Condensed";
+  src: url("../fonts/Saira_Condensed/SairaCondensed-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Saira Condensed";
+  src: url("../fonts/Saira_Condensed/SairaCondensed-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* --- Paleta ------------------------------------------------------------ */
+  --bg: #F8FCFF;
+  --surface: #FFFFFF;
+  --muted: #EAF1F8;
+  --secondary: #E3F1FB;
+  --border: #D7DFE8;
+  --text: #0B1A31;
+  --text-soft: #5D6E80;
+  --primary: #032B54;
+  --navy-deep: #02132E;
+  --on-primary: #F3FAFF;
+  --accent: #DCB05B;
+  --on-accent: #0B1F3B;
+  --gold-soft: #F0DCB1;
+
+  /* Componentes do navy em RGB, para usar com alpha nos véus */
+  --primary-rgb: 3, 43, 84;
+
+  /* --- Tipografia -------------------------------------------------------- */
+  --font-display: "Saira Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --font-body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Escala: mobile por padrão, desktop a partir de 768px (plano.md §4) */
+  --t-h1: 40px;
+  --t-h2: 30px;
+  --t-h3: 21px;
+  --t-eyebrow: 12px;
+  --t-stat: 44px;
+  --t-corpo: 17px;
+  --t-corpo-p: 15px;
+  --t-botao: 14px;
+
+  /* --- Espaçamento: base 8px --------------------------------------------- */
+  --e-1: 4px;
+  --e-2: 8px;
+  --e-3: 12px;
+  --e-4: 16px;
+  --e-5: 24px;
+  --e-6: 32px;
+  --e-7: 40px;
+  --e-8: 56px;
+  --e-9: 72px;
+  --e-10: 80px;
+  --e-11: 112px;
+
+  --sec-pad: var(--e-10);          /* padding vertical de seção */
+
+  /* --- Medidas ----------------------------------------------------------- */
+  --container: 1152px;
+  --container-pad: 24px;
+  --header-h: 72px;
+
+  --raio-card: 16px;
+  --raio-campo: 8px;
+  --raio-pill: 9999px;
+
+  --transicao: 240ms cubic-bezier(.4, 0, .2, 1);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --t-h1: 68px;
+    --t-h2: 40px;
+    --t-h3: 24px;
+    --t-eyebrow: 13px;
+    --t-stat: 68px;
+    --t-corpo: 18px;
+    --t-corpo-p: 16px;
+
+    --sec-pad: var(--e-11);
+  }
+}

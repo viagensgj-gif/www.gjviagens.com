@@ -1,0 +1,121 @@
+/* ==========================================================================
+   Base — reset, container e comportamento de texto
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--header-h);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--t-corpo);
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, picture, svg { display: block; max-width: 100%; }
+img { height: auto; }
+
+/* --- Títulos -------------------------------------------------------------
+   Saira Condensed. text-wrap:balance distribui as linhas para não sobrar
+   uma palavra sozinha na última. Sem hifenização: o navegador erra em pt-BR.
+   -------------------------------------------------------------------------- */
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  margin: 0;
+  text-wrap: balance;
+  hyphens: none;
+}
+
+h1 {
+  font-size: var(--t-h1);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  max-width: 20ch;
+}
+
+h2 {
+  font-size: var(--t-h2);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.005em;
+  max-width: 24ch;
+}
+
+h3 {
+  font-size: var(--t-h3);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Título de uma palavra por linha. Entrelinha fecha porque não há descida de
+   linha corrida para compensar, e a pilha precisa ler como um bloco só. */
+.titulo-empilhado {
+  line-height: 1.0;
+  max-width: none;
+}
+.titulo-empilhado span { display: block; }
+
+/* --- Parágrafos ----------------------------------------------------------
+   Medida em ch, não em px: a Saira é condensada e cabe mais caractere na
+   mesma largura. Em ch a linha se ajusta sozinha se a fonte mudar.
+   -------------------------------------------------------------------------- */
+
+p { margin: 0; text-wrap: pretty; hyphens: none; }
+
+.medida      { max-width: 60ch; }
+.medida--sub { max-width: 65ch; }
+.medida--hero{ max-width: 52ch; }
+
+/* Valores em real, telefone e horário nunca quebram no meio */
+.nao-quebra { white-space: nowrap; }
+
+/* --- Container ------------------------------------------------------------ */
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+/* --- Links e foco --------------------------------------------------------- */
+
+a { color: inherit; text-decoration: none; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.pular-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: var(--accent);
+  color: var(--on-accent);
+  padding: var(--e-3) var(--e-4);
+  font-weight: 600;
+}
+.pular-link:focus { left: var(--e-3); top: var(--e-3); }
+
+/* --- Movimento ------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}

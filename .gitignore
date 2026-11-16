@@ -1,0 +1,33 @@
+# ---------------------------------------------------------------------------
+# Dados de cliente — NÃO VERSIONAR
+# ---------------------------------------------------------------------------
+# O comparativo traz nome e sobrenome de 12 colaboradores de um cliente real.
+# Uma vez enviado ao GitHub, o arquivo fica no histórico para sempre, mesmo que
+# seja apagado depois. Se o repositório virar público (ou for compartilhado),
+# esses nomes vazam junto.
+#
+# Para versionar mesmo assim (só faz sentido em repositório privado), apague
+# a linha abaixo.
+docs/comparativo-economia.pdf
+
+# ---------------------------------------------------------------------------
+# Configuração local da máquina
+# ---------------------------------------------------------------------------
+# Aponta para uma pasta temporária que só existe neste computador, e que o
+# Windows limpa de tempos em tempos. Em outra máquina, quebra.
+.claude/launch.json
+
+# ---------------------------------------------------------------------------
+# Pacote gerado — é montado a partir dos arquivos do projeto
+# ---------------------------------------------------------------------------
+gj-viagens-site.zip
+site-publicar/
+
+# ---------------------------------------------------------------------------
+# Lixo do Windows e do OneDrive
+# ---------------------------------------------------------------------------
+Thumbs.db
+desktop.ini
+*.tmp
+~$*
+.DS_Store

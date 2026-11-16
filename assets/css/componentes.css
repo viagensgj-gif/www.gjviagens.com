@@ -1,0 +1,566 @@
+/* ==========================================================================
+   Componentes — eyebrow, botão, card, tabela, passo, marca
+   ========================================================================== */
+
+/* --- Eyebrow --------------------------------------------------------------
+   Filete dourado antes do rótulo. Dá textura ao topo da seção sem inventar
+   cor nova: o filete é acento, como manda specs/design.md §1.
+   -------------------------------------------------------------------------- */
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-3);
+  font-family: var(--font-display);
+  font-size: var(--t-eyebrow);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.eyebrow::before,
+.eyebrow::after {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: var(--accent);
+  flex: none;
+}
+.eyebrow::after { display: none; }
+
+/* Centralizado: filete dos dois lados */
+.secao__topo--centro .eyebrow::after { display: block; }
+
+.sobre-navy .eyebrow { color: var(--accent); }
+.sobre-navy .eyebrow::before,
+.sobre-navy .eyebrow::after { background: var(--gold-soft); opacity: .7; }
+
+/* --- Botões ---------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--e-2);
+  min-height: 46px;
+  padding: 14px 28px;
+  border: 0;
+  border-radius: var(--raio-pill);
+  font-family: var(--font-body);
+  font-size: var(--t-botao);
+  font-weight: 600;
+  letter-spacing: .35px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--transicao), box-shadow var(--transicao),
+              transform var(--transicao);
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+
+.btn--ouro { background: var(--accent); color: var(--on-accent); }
+.btn--ouro:hover { background: var(--gold-soft); }
+
+.btn--linha {
+  background: transparent;
+  color: var(--on-primary);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .4);
+}
+.btn--linha:hover { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .75); }
+
+.btn--linha-clara {
+  background: transparent;
+  color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+.btn--linha-clara:hover { box-shadow: inset 0 0 0 1px var(--primary); }
+
+/* --- Faixa de números -----------------------------------------------------
+   "até" é qualificador, não número: entra menor, em Manrope, acima do valor.
+   -------------------------------------------------------------------------- */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--e-6);
+  margin: 0;
+  padding: 0;
+}
+
+.stat { margin: 0; }
+
+.stat__pre {
+  display: block;
+  height: 16px;
+  margin-bottom: 4px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  opacity: .8;
+}
+
+.stat__n {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--t-stat);
+  font-weight: 800;
+  line-height: .95;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+/* Alinhamento: quem não tem "até" ganha o mesmo espaço reservado, para todos
+   os números começarem na mesma linha. 16px do rótulo + 4px de respiro. */
+.stat__n::before {
+  content: "";
+  display: block;
+  height: 20px;
+}
+.stat__n:has(.stat__pre)::before { content: none; }
+
+.stat__r {
+  display: block;
+  /* margin-inline-start zerado: o <dd> vem com 40px por padrão no navegador */
+  margin: var(--e-3) 0 0;
+  padding-top: var(--e-3);
+  border-top: 1px solid rgba(255, 255, 255, .14);
+  font-size: var(--t-corpo-p);
+  line-height: 1.4;
+  text-wrap: pretty;
+  color: rgba(243, 250, 255, .74);
+  max-width: 26ch;
+}
+
+/* --- Card ------------------------------------------------------------------ */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+  padding: var(--e-5);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--raio-card);
+}
+
+.card h3 { margin: 0; }
+
+/* Filete dourado acima do título: o "algo a mais" pedido, sem cor nova */
+.card h3::before {
+  content: "";
+  display: block;
+  width: 26px;
+  height: 2px;
+  margin-bottom: var(--e-3);
+  background: var(--accent);
+  transition: width var(--transicao);
+}
+.card .frente__tag + h3::before { display: none; }
+
+.card p {
+  font-size: var(--t-corpo-p);
+  line-height: 1.6;
+  color: var(--text-soft);
+}
+
+.sobre-navy .card {
+  background: rgba(255, 255, 255, .06);
+  border-color: rgba(255, 255, 255, .12);
+}
+.sobre-navy .card p { color: rgba(243, 250, 255, .74); }
+
+.card__icone { color: var(--primary); flex: none; transition: color var(--transicao); }
+.sobre-navy .card__icone { color: var(--accent); }
+
+@media (min-width: 768px) {
+  .card { padding: var(--e-6); gap: var(--e-4); }
+}
+
+/* --- Card interativo -------------------------------------------------------
+   Passar o mouse ou clicar vira o card para navy. Só cor e borda: nada de
+   deslocamento grande, para não brigar com specs/design.md §7.
+   -------------------------------------------------------------------------- */
+
+.card--interativo { cursor: pointer; transition:
+  background var(--transicao), border-color var(--transicao), color var(--transicao); }
+
+.card--interativo:hover,
+.card--interativo.is-ativo {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--on-primary);
+}
+.card--interativo:hover p,
+.card--interativo.is-ativo p { color: rgba(243, 250, 255, .80); }
+
+.card--interativo:hover .card__icone,
+.card--interativo.is-ativo .card__icone { color: var(--accent); }
+
+.card--interativo:hover h3::before,
+.card--interativo.is-ativo h3::before { width: 44px; }
+
+.card--interativo:hover .frente__rotulo,
+.card--interativo.is-ativo .frente__rotulo { color: var(--on-primary); }
+
+/* Sobre navy, o card interativo clareia em vez de escurecer */
+.sobre-navy .card--interativo:hover,
+.sobre-navy .card--interativo.is-ativo {
+  background: rgba(255, 255, 255, .12);
+  border-color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card--interativo, .card h3::before { transition: none; }
+}
+
+/* --- Card de frente -------------------------------------------------------- */
+
+.frente__tag {
+  font-family: var(--font-display);
+  font-size: var(--t-eyebrow);
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.frente__bloco { margin-top: var(--e-3); }
+
+.frente__rotulo {
+  display: block;
+  margin-bottom: var(--e-1);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text);
+  transition: color var(--transicao);
+}
+.sobre-navy .frente__rotulo { color: var(--on-primary); }
+
+/* --- Grade ----------------------------------------------------------------- */
+
+.grade { display: grid; gap: var(--e-5); grid-template-columns: 1fr; }
+
+@media (min-width: 768px) {
+  .grade--2, .grade--3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .grade--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* Grade de 5 itens: a última fileira fica centralizada em vez de deixar buraco
+   à direita. Truque: grid com o dobro de colunas e cada card ocupando duas. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .grade--5 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .grade--5 > * { grid-column: span 2; }
+  .grade--5 > *:nth-child(5) { grid-column: 2 / span 2; }
+}
+@media (min-width: 1024px) {
+  .grade--5 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .grade--5 > * { grid-column: span 2; }
+  .grade--5 > *:nth-child(4) { grid-column: 2 / span 2; }
+  .grade--5 > *:nth-child(5) { grid-column: 4 / span 2; }
+}
+
+/* --- Tabela ---------------------------------------------------------------- */
+
+.tabela-caixa {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--raio-card);
+  background: var(--surface);
+}
+
+.tabela {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.tabela th,
+.tabela td {
+  padding: var(--e-4);
+  text-align: right;
+  white-space: nowrap;
+}
+.tabela th:first-child,
+.tabela td:first-child { text-align: left; white-space: normal; }
+
+.tabela thead th {
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: var(--t-eyebrow);
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.tabela thead th:first-child { border-top-left-radius: 15px; }
+.tabela thead th:last-child  { border-top-right-radius: 15px; }
+
+.tabela tbody tr + tr { border-top: 1px solid var(--border); }
+.tabela tbody tr:nth-child(even) { background: var(--muted); }
+
+.tabela .riscado { text-decoration: line-through; color: var(--text-soft); }
+.tabela .eco { color: var(--text); font-weight: 700; }
+.tabela .pct { color: #8A6A22; font-weight: 700; }
+
+.tabela tfoot td {
+  background: #FBF5E8;
+  border-top: 2px solid var(--accent);
+  font-weight: 700;
+  vertical-align: bottom;
+}
+.tabela tfoot .pct { color: #7A5C1B; }
+
+/* Economia total: o número que o leitor tem que levar embora.
+   Sai do corpo de tabela e vira dado em Saira, com rótulo próprio. */
+.eco__rotulo {
+  display: block;
+  margin-bottom: 2px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  opacity: .7;
+}
+
+.tabela tfoot .eco--total {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.01em;
+  color: #7A5C1B;
+}
+.tabela tfoot .eco--total .eco__rotulo { color: #7A5C1B; }
+
+/* Tabela sobre navy */
+.tabela-caixa--navy {
+  background: rgba(255, 255, 255, .05);
+  border-color: rgba(255, 255, 255, .14);
+}
+.tabela--navy { min-width: 560px; }
+.tabela--navy thead th {
+  background: rgba(255, 255, 255, .08);
+  color: var(--gold-soft);
+}
+.tabela--navy tbody tr + tr { border-top-color: rgba(255, 255, 255, .10); }
+.tabela--navy tbody tr:nth-child(even) { background: rgba(255, 255, 255, .04); }
+.tabela--navy .riscado { color: rgba(243, 250, 255, .45); }
+.tabela--navy .eco { color: var(--on-primary); }
+.tabela--navy tfoot td {
+  background: rgba(220, 176, 91, .12);
+  border-top-color: var(--accent);
+  color: var(--on-primary);
+}
+.tabela--navy tfoot .eco--total,
+.tabela--navy tfoot .eco--total .eco__rotulo { color: var(--accent); }
+
+/* Total em destaque na versão card do mobile */
+.linha-card--total .linha-card__pct { font-size: 15px; letter-spacing: .08em; text-transform: uppercase; }
+.linha-card__total {
+  display: block;
+  margin-top: var(--e-3);
+  padding-top: var(--e-3);
+  border-top: 1px solid var(--accent);
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+  color: #7A5C1B;
+}
+.sobre-navy .linha-card__total { color: var(--accent); }
+.linha-card__total small {
+  display: block;
+  margin-bottom: 2px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  opacity: .75;
+}
+
+/* --- Botão flutuante do WhatsApp -------------------------------------------
+   Fica na tela a página inteira. Dourado porque é o CTA permanente; os CTAs
+   de seção continuam sendo um por dobra (ver nota em @memoria.md).
+   -------------------------------------------------------------------------- */
+
+.zap {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: var(--raio-pill);
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 6px 22px rgba(2, 19, 46, .30);
+  transition: background var(--transicao), transform var(--transicao);
+}
+.zap:hover { background: var(--gold-soft); transform: translateY(-2px); }
+
+@media (min-width: 768px) {
+  .zap { right: 28px; bottom: 28px; width: 58px; height: 58px; }
+}
+@media (prefers-reduced-motion: reduce) { .zap { transition: none; } }
+
+/* --- Redes no rodapé -------------------------------------------------------- */
+
+.redes { display: inline-flex; align-items: center; gap: var(--e-3); }
+
+.redes a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--raio-pill);
+  border: 1px solid rgba(255, 255, 255, .18);
+  color: var(--on-primary);
+  transition: border-color var(--transicao), color var(--transicao);
+}
+.redes a:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Versão em cards, só no mobile */
+.tabela-cards { display: grid; gap: var(--e-3); }
+
+.linha-card {
+  padding: var(--e-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--raio-campo);
+}
+.sobre-navy .linha-card {
+  background: rgba(255, 255, 255, .06);
+  border-color: rgba(255, 255, 255, .12);
+}
+.linha-card__topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--e-3);
+  margin-bottom: var(--e-3);
+  padding-bottom: var(--e-3);
+  border-bottom: 1px solid var(--border);
+}
+.sobre-navy .linha-card__topo { border-bottom-color: rgba(255, 255, 255, .12); }
+.linha-card__trecho { font-family: var(--font-display); font-size: 19px; font-weight: 600; }
+.linha-card__pct {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 800;
+  color: #8A6A22;
+}
+.sobre-navy .linha-card__pct { color: var(--accent); }
+.linha-card dl { display: grid; grid-template-columns: 1fr auto; gap: var(--e-1) var(--e-3); margin: 0; }
+.linha-card dt { font-size: 14px; color: var(--text-soft); }
+.sobre-navy .linha-card dt { color: rgba(243, 250, 255, .68); }
+.linha-card dd { margin: 0; font-size: 14px; font-variant-numeric: tabular-nums; text-align: right; }
+
+.linha-card--total { border-color: var(--accent); background: #FBF5E8; }
+.sobre-navy .linha-card--total { background: rgba(220, 176, 91, .12); border-color: var(--accent); }
+
+@media (max-width: 767px) { .tabela-caixa { display: none; } }
+@media (min-width: 768px) { .tabela-cards { display: none; } }
+
+/* --- Bloco de indicação ----------------------------------------------------
+   "Para quem rende mais". Caixa sobre a superfície clara, com o mesmo eyebrow
+   de filete dourado usado no resto do site.
+   -------------------------------------------------------------------------- */
+
+.indicacao {
+  max-width: 62ch;
+  margin: 0 auto var(--e-8);
+  padding: var(--e-5);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--raio-card);
+  text-align: center;
+}
+
+.indicacao .eyebrow { margin-bottom: var(--e-3); }
+.indicacao .eyebrow::after { display: block; }
+
+.indicacao__t {
+  font-size: var(--t-corpo-p);
+  line-height: 1.6;
+  color: var(--text-soft);
+}
+
+.sobre-navy .indicacao {
+  background: rgba(255, 255, 255, .06);
+  border-color: rgba(255, 255, 255, .12);
+}
+.sobre-navy .indicacao__t { color: rgba(243, 250, 255, .80); }
+
+@media (min-width: 768px) { .indicacao { padding: var(--e-6); } }
+
+/* --- Passo numerado --------------------------------------------------------- */
+
+.passo { position: relative; padding-top: var(--e-6); }
+
+.passo__n {
+  position: absolute;
+  top: 0;
+  left: -6px;
+  font-family: var(--font-display);
+  font-size: 72px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--accent);
+  opacity: .3;
+  pointer-events: none;
+}
+
+.passo h3, .passo p { position: relative; }
+.passo h3::before { content: none; }
+
+/* --- Lista de checagem ------------------------------------------------------ */
+
+.lista-check { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--e-4); }
+
+.lista-check li {
+  display: flex;
+  gap: var(--e-3);
+  align-items: flex-start;
+  font-size: var(--t-corpo-p);
+  line-height: 1.55;
+}
+
+.lista-check svg { flex: none; margin-top: 3px; color: var(--accent); }
+
+/* --- Marca ------------------------------------------------------------------ */
+
+/* min-height 44px: o monograma tem 32px, e o link precisa do alvo de toque
+   mínimo (specs/plano.md §3). */
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-3);
+  min-height: 44px;
+  color: var(--on-primary);
+}
+.marca__mono { width: auto; height: 32px; flex: none; }
+.marca__nome {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  line-height: 1;
+}
